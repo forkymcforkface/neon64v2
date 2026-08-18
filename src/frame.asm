@@ -198,6 +198,39 @@ ReadBack:
   ls_gp(sw t0, si_completion_vector)
 
 Process:
+  lui t2, 0xB1FF
+  lw t1, 0x0000 (t2)
+  beqz t1, igr_cont
+  nop
+  ls_gp(lbu t0, read_con_buf + 0*8+2)
+  andi t0, 0xc0
+  bnez t0, igr_leak
+  ls_gp(lwu t0, read_con_buf + 0*8+4)
+  srl t0, t0, 16
+  and t0, t0, t1
+  bne t0, t1, igr_leak
+  nop
+  la t3, IGR.hold
+  lwu t0, 0 (t3)
+  addiu t0, 1
+  sw t0, 0 (t3)
+  lui t2, 0xB1FF
+  lw t2, 0x0004 (t2)
+  slt t1, t0, t2
+  bnez t1, igr_cont
+  nop
+  j IGR.Reboot
+  nop
+igr_leak:
+  la t3, IGR.hold
+  lwu t0, 0 (t3)
+  beqz t0, igr_cont
+  nop
+  addiu t0, -1
+  sw t0, 0 (t3)
+igr_cont:
+
+
   ls_gp(lbu t4, menu_enabled)
 
 

@@ -254,6 +254,7 @@ include "rom.asm"
 include "menu.asm"
 include "save.asm"
 include "lib/debug_print.asm"
+include "igr.asm"
 
 emit_overlay_index()
 
